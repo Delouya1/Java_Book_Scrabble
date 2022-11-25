@@ -109,7 +109,13 @@ public class MainTrain {
         Word bit3 = new Word(get("A_ONE"), 11, 3, false);
         if (b.tryPlaceWord(bit3) != 26)
             System.out.println("ATONE should be 26 (-15)");
+
+        Word bit4 = new Word(get("A_ONE"), 11, 3, true);
+        if (b.tryPlaceWord(bit4) != 0)
+            System.out.println("ATONE should be 0 (-15)");
+
     }
+
 
     public static void main(String[] args) {
         testBag(); // 30 points

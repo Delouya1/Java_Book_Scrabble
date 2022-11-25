@@ -193,6 +193,7 @@ public class Board {
         int col = word.getCol();
         boolean vertical = word.isVertical();
 
+
         if (vertical) {
             for (int i = 0; i < word.getTiles().length; i++) {
 
@@ -372,6 +373,9 @@ public class Board {
         int col = word.getCol();
         boolean vertical = word.isVertical();
 
+        if (!boardLegal(word))
+            return 0;
+
         Tile[] tiles = new Tile[word.getTiles().length];
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = word.getTiles()[i];
@@ -383,13 +387,13 @@ public class Board {
 
         //if the word is boardLegal() and the words formed are legal,
         // place the word on the board and return the score of the word and the words formed
-        if (boardLegal(word)) {
             for (Word w : words) {
                 if (!dictionaryLegal(w)) {
                     return 0;
                 }
             }
 
+              //if it's the first word
             if (this.wordOnBoard == 0) {
                 if (vertical) {
                     for (int i = 0; i < length; i++) {
@@ -400,7 +404,6 @@ public class Board {
                         gameBoard[row][col + i].setTile(tiles[i]);
                     }
                 }
-
 
                 score += getScore(word);
                 this.wordOnBoard++;
@@ -433,8 +436,6 @@ public class Board {
         }
 
 
-        return 0;
-    }
 
 
     public static class CheckerBoard {
