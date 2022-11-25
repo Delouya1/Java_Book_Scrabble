@@ -232,26 +232,7 @@ public class Board {
         return words;
     }
 
-    //isOnBoard() returns true if the given word is already on the board
-    public boolean isOnBoard(Word word) {
-        int row = word.getRow();
-        int col = word.getCol();
-        boolean vertical = word.isVertical();
-        if (vertical) {
-            for (int i = 0; i < word.getTiles().length; i++) {
-                if (gameBoard[row + i][col].getTile() != null) {
-                    return true;
-                }
-            }
-        } else {
-            for (int i = 0; i < word.getTiles().length; i++) {
-                if (gameBoard[row][col + i].getTile() != null) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+  
 
     private Word getWordRightLeft(Tile tile, int row, int col) {
         int left = col;
