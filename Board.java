@@ -135,6 +135,8 @@ public class Board {
     //return true if the given word doesn't switch any existing tiles on the board
     private boolean noTileSwitch(Word word, int row, int col, boolean vertical) {
 
+        //PROBLEM HERE
+
         Tile[] tiles = new Tile[word.getTiles().length];
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = word.getTiles()[i];
@@ -145,13 +147,20 @@ public class Board {
 
         if (vertical) {
             for (int i = 0; i < length; i++) {
-                if (gameBoard[row + i][col].tile != null && gameBoard[row + i][col].tile == tiles[i] && tiles[i] != null) {
+                if (gameBoard[row + i][col].tile != null &&  tiles[i] != null && gameBoard[row + i][col].tile.letter != tiles[i].letter) {
                     return false;
                 }
+                if (gameBoard[row + i][col].tile == null && tiles[i] == null) {
+                    return false;
+                }
+
             }
         } else {
             for (int i = 0; i < length; i++) {
-                if (gameBoard[row][col + i].tile != null && gameBoard[row][col + i].tile != tiles[i] && tiles[i] != null) {
+                if (gameBoard[row][col + i].tile != null && tiles[i] != null && gameBoard[row][col + i].tile.letter != tiles[i].letter) {
+                    return false;
+                }
+                if (gameBoard[row][col + i].tile == null && tiles[i] == null) {
                     return false;
                 }
             }
@@ -164,9 +173,9 @@ public class Board {
         int length = word.getTiles().length;
         //if the word pass true the middle tile (even partially)
         if (vertical) {
-            return col == 7 && row + length >= 7;
+            return col == 7 &&  row<=7 && row + length >= 7;
         } else {
-            return row == 7 && col + length >= 7;
+            return row == 7 && col<=7 &&col + length >= 7;
         }
 
     }
@@ -186,9 +195,17 @@ public class Board {
 
         if (vertical) {
             for (int i = 0; i < word.getTiles().length; i++) {
+
                 if (getWordRightLeft(word.tiles[i], row + i, col) != null && word.tiles[i] != null) {
                     words.add(getWordRightLeft(word.tiles[i], row + i, col));
+
+                    //if its the first or last tile of the word, check up and down
+                    if ((i == 0 || i == word.getTiles().length - 1) && getWordUpDown(word.tiles[i], col + i, col) != null) {
+                        words.add(getWordUpDown(word.tiles[i], row , col + i));
+                    }
+
                 }
+
 
 
             }
@@ -196,12 +213,44 @@ public class Board {
             for (int i = 0; i < word.getTiles().length; i++) {
                 if (getWordUpDown(word.tiles[i], row, col + i) != null && word.tiles[i] != null) {
                     words.add(getWordUpDown(word.tiles[i], row, col + i));
+
+                    //if its the first or last tile of the word, check left and right
+                    if ((i == 0 || i == word.getTiles().length - 1) && getWordRightLeft(word.tiles[i], row, col + i) != null) {
+                        words.add(getWordRightLeft(word.tiles[i], row, col + i));
+                    }
+
+
                 }
+
             }
         }
 
+        //for each word in words, if word is already placed on board, remove it from words
+
+
         words.add(word);
         return words;
+    }
+
+    //isOnBoard() returns true if the given word is already on the board
+    public boolean isOnBoard(Word word) {
+        int row = word.getRow();
+        int col = word.getCol();
+        boolean vertical = word.isVertical();
+        if (vertical) {
+            for (int i = 0; i < word.getTiles().length; i++) {
+                if (gameBoard[row + i][col].getTile() != null) {
+                    return true;
+                }
+            }
+        } else {
+            for (int i = 0; i < word.getTiles().length; i++) {
+                if (gameBoard[row][col + i].getTile() != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private Word getWordRightLeft(Tile tile, int row, int col) {
@@ -252,6 +301,7 @@ public class Board {
 
         return new Word(tiles, up, col, true);
     }
+
 
 
     //DL - 2 times the letter score
@@ -413,6 +463,7 @@ public class Board {
 
         private CheckerBoard(String tileEffect) {
             this.tileEffect = tileEffect;
+            setTile(null);
 
         }
 
