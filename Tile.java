@@ -58,6 +58,11 @@ public class Tile {
         //gets random tile from the bag:
         public Tile getRand() {
             //get random tile from bag according to the probability of each letter:
+
+            //if bag is empty:
+            if (this.tile_count == 0)
+                return null;
+
             Random rand = new Random();
             int rand_num = rand.nextInt(this.tile_count);
             int letter_index = 0;
@@ -66,6 +71,7 @@ public class Tile {
                 letter_count += this.letterQty_array[letter_index++];
             }
 
+            //update all the needed variables:
             letter_index--;
             this.letterQty_array[letter_index]--;
             this.tile_count--;
