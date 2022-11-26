@@ -1,7 +1,6 @@
 package test;
 
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -13,8 +12,6 @@ public class Tile {
         this.letter = letter;
         this.score = score;
     }
-
-
 
 
     @Override
@@ -60,20 +57,20 @@ public class Tile {
 
         //gets random tile from the bag:
         public Tile getRand() {
-            if (this.tile_count == 0) // if the bag is empty.
-                return null;
-
+            //get random tile from bag according to the probability of each letter:
             Random rand = new Random();
-            //generates a random number between 0-25 which represents a letter.
-            int rand_tile = rand.nextInt(26);
-            while (this.letterQty_array[rand_tile] == 0) { //if the Qty of the letter in the array
-                rand_tile = rand.nextInt(26);      //equals 0 then generate a new one.
+            int rand_num = rand.nextInt(this.tile_count);
+            int letter_index = 0;
+            int letter_count = 0;
+            while (letter_count <= rand_num) {
+                letter_count += this.letterQty_array[letter_index++];
             }
-            //update related fields.
-            this.letterQty_array[rand_tile]--;
+
+            letter_index--;
+            this.letterQty_array[letter_index]--;
             this.tile_count--;
 
-            return this.tile_array[rand_tile];
+            return this.tile_array[letter_index];
 
         }
 

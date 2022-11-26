@@ -7,11 +7,9 @@ import java.util.Objects;
 public class Board {
 
     static final public int BoardSize = 15;
-    public CheckerBoard[][] gameBoard = new CheckerBoard[BoardSize][BoardSize];
     private static Board checkBoard = null;
+    public CheckerBoard[][] gameBoard = new CheckerBoard[BoardSize][BoardSize];
     int wordOnBoard = 0;
-
-
 
 
     private Board() {
@@ -147,7 +145,7 @@ public class Board {
 
         if (vertical) {
             for (int i = 0; i < length; i++) {
-                if (gameBoard[row + i][col].tile != null &&  tiles[i] != null && gameBoard[row + i][col].tile.letter != tiles[i].letter) {
+                if (gameBoard[row + i][col].tile != null && tiles[i] != null && gameBoard[row + i][col].tile.letter != tiles[i].letter) {
                     return false;
                 }
                 if (gameBoard[row + i][col].tile == null && tiles[i] == null) {
@@ -173,9 +171,9 @@ public class Board {
         int length = word.getTiles().length;
         //if the word pass true the middle tile (even partially)
         if (vertical) {
-            return col == 7 &&  row<=7 && row + length >= 7;
+            return col == 7 && row <= 7 && row + length >= 7;
         } else {
-            return row == 7 && col<=7 &&col + length >= 7;
+            return row == 7 && col <= 7 && col + length >= 7;
         }
 
     }
@@ -202,11 +200,10 @@ public class Board {
 
                     //if its the first or last tile of the word, check up and down
                     if ((i == 0 || i == word.getTiles().length - 1) && getWordUpDown(word.tiles[i], col + i, col) != null) {
-                        words.add(getWordUpDown(word.tiles[i], row , col + i));
+                        words.add(getWordUpDown(word.tiles[i], row, col + i));
                     }
 
                 }
-
 
 
             }
@@ -233,7 +230,6 @@ public class Board {
         return words;
     }
 
-  
 
     private Word getWordRightLeft(Tile tile, int row, int col) {
         int left = col;
@@ -285,7 +281,6 @@ public class Board {
     }
 
 
-
     //DL - 2 times the letter score
     //TL - 3 times the letter score
     //DW - 2 times the word score
@@ -323,10 +318,10 @@ public class Board {
 
 
                     else if (Objects.equals(gameBoard[row + i][col].tileEffect, "DW")) {
-                        score += gameBoard[row][col + i].tile.score;
+                        score += gameBoard[row + i][col].tile.score;
                         scoreMultiplier *= 2;
                     } else if (Objects.equals(gameBoard[row + i][col].tileEffect, "TW")) {
-                        score += gameBoard[row][col + i].tile.score;
+                        score += gameBoard[row + i][col].tile.score;
                         scoreMultiplier *= 3;
                     }
 
@@ -387,55 +382,53 @@ public class Board {
 
         //if the word is boardLegal() and the words formed are legal,
         // place the word on the board and return the score of the word and the words formed
-            for (Word w : words) {
-                if (!dictionaryLegal(w)) {
-                    return 0;
-                }
+        for (Word w : words) {
+            if (!dictionaryLegal(w)) {
+                return 0;
             }
+        }
 
-              //if it's the first word
-            if (this.wordOnBoard == 0) {
-                if (vertical) {
-                    for (int i = 0; i < length; i++) {
-                        gameBoard[row + i][col].setTile(tiles[i]);
-                    }
-                } else {
-                    for (int i = 0; i < length; i++) {
-                        gameBoard[row][col + i].setTile(tiles[i]);
-                    }
-                }
-
-                score += getScore(word);
-                this.wordOnBoard++;
-                return score;
-            }
-
+        //if it's the first word
+        if (this.wordOnBoard == 0) {
             if (vertical) {
-                //if one the word tile is missing, use the tile on the board
                 for (int i = 0; i < length; i++) {
-                    if (word.tiles[i] != null) {
-                        gameBoard[row + i][col].setTile(tiles[i]);
-                    }
+                    gameBoard[row + i][col].setTile(tiles[i]);
                 }
-
             } else {
                 for (int i = 0; i < length; i++) {
-                    if (word.tiles[i] != null) {
-                        gameBoard[row][col + i].setTile(tiles[i]);
-                    }
+                    gameBoard[row][col + i].setTile(tiles[i]);
                 }
-
             }
 
-            //add the score of the word and the words formed
-            for (Word w : words) {
-                score += getScore(w);
-            }
-
+            score += getScore(word);
+            this.wordOnBoard++;
             return score;
         }
 
+        if (vertical) {
+            //if one the word tile is missing, use the tile on the board
+            for (int i = 0; i < length; i++) {
+                if (word.tiles[i] != null) {
+                    gameBoard[row + i][col].setTile(tiles[i]);
+                }
+            }
 
+        } else {
+            for (int i = 0; i < length; i++) {
+                if (word.tiles[i] != null) {
+                    gameBoard[row][col + i].setTile(tiles[i]);
+                }
+            }
+
+        }
+
+        //add the score of the word and the words formed
+        for (Word w : words) {
+            score += getScore(w);
+        }
+
+        return score;
+    }
 
 
     public static class CheckerBoard {

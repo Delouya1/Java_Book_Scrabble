@@ -2,13 +2,12 @@ package test;
 
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Word {
 
-     Tile[] tiles;
-     int row, col;
-     boolean vertical;
+    Tile[] tiles;
+    int row, col;
+    boolean vertical;
 
     public Word(Tile[] tiles, int row, int col, boolean vertical) {
         this.tiles = tiles;
