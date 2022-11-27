@@ -198,7 +198,7 @@ public class Board {
                 if (getWordRightLeft(word.tiles[i], row + i, col) != null && word.tiles[i] != null) {
                     words.add(getWordRightLeft(word.tiles[i], row + i, col));
 
-                    //if its the first or last tile of the word, check up and down
+                    //if it's the first or last tile of the word, check up and down
                     if ((i == 0 || i == word.getTiles().length - 1) && getWordUpDown(word.tiles[i], col + i, col) != null) {
                         words.add(getWordUpDown(word.tiles[i], row, col + i));
                     }
@@ -212,7 +212,7 @@ public class Board {
                 if (getWordUpDown(word.tiles[i], row, col + i) != null && word.tiles[i] != null) {
                     words.add(getWordUpDown(word.tiles[i], row, col + i));
 
-                    //if its the first or last tile of the word, check left and right
+                    //if it's the first or last tile of the word, check left and right
                     if ((i == 0 || i == word.getTiles().length - 1) && getWordRightLeft(word.tiles[i], row, col + i) != null) {
                         words.add(getWordRightLeft(word.tiles[i], row, col + i));
                     }
@@ -267,9 +267,10 @@ public class Board {
         Tile[] tiles = new Tile[down - up + 1];
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = gameBoard[up + i][col].tile;
-            if (gameBoard[up + i][col].tile == null) {
-                tiles[i] = tile;
-            }
+
+    //            if (gameBoard[up + i][col].tile == null) {  // might not be needed
+    //                tiles[i] = tile;
+    //            }
         }
 
         if (tiles.length == 1) {
@@ -302,7 +303,7 @@ public class Board {
 
         if (vertical) {
             for (int i = 0; i < length; i++) {
-                //if tile relays on the middle tile and its not the first word give a score only for the letter
+                //if tile relays on the middle tile, and it's not the first word give a score only for the letter
                 if (col == 7 && row + i == 7 && this.wordOnBoard != 0) {
                     score += gameBoard[7][7].tile.score;
                 } else {
@@ -331,7 +332,7 @@ public class Board {
 
         } else {
             for (int i = 0; i < length; i++) {
-                //if tile relays on the middle tile and its not the first word give a score only for the letter
+                //if tile relays on the middle tile, and it's not the first word give a score only for the letter
                 if (row == 7 && col + i == 7 && this.wordOnBoard != 0) {
                     score += tiles[i].score;
                 } else {
@@ -451,13 +452,6 @@ public class Board {
 
         }
 
-        public String getTileEffect() {
-            return tileEffect;
-        }
-
-        public void setTileEffect(String tileEffect) {
-            this.tileEffect = tileEffect;
-        }
     }
 
 
